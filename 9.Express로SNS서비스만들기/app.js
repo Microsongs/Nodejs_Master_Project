@@ -9,6 +9,7 @@ const dotenv = require('dotenv');   // 환경 변수 관리하는 패키지
 // dotenv는 require하고 나서 제일 위에 적용해 주어야 함
 dotenv.config();
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models');
 
 const app = express();
 // 배포 시 port를 다르게 설정하기 위함
@@ -19,6 +20,17 @@ nunjucks.configure('views',{
     express: app,
     watch: true,
 });
+
+// 시퀄라이즈 동기화
+// force: true일 경우 테이블을 삭제하고 생성, 
+// alter: true일 경우 테이블을 삭제하지 않지만 가끔 수정 시 에러가 발생
+sequelize.sync({ force: true })
+    .then(()=>{
+        console.log('데이터베이스 연결 성공');
+    })
+    .catch((err) => {
+        console.error(err);
+    });
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
