@@ -22,9 +22,9 @@ nunjucks.configure('views',{
 });
 
 // 시퀄라이즈 동기화
-// force: true일 경우 테이블을 삭제하고 생성, 
-// alter: true일 경우 테이블을 삭제하지 않지만 가끔 수정 시 에러가 발생
-sequelize.sync({ force: true })
+// force: true일 경우 db 변경시 테이블을 삭제하고 생성, 
+// alter: true일 경우 db 변경시 테이블을 삭제하지 않지만 가끔 수정 시 에러가 발생
+sequelize.sync({ force: false })
     .then(()=>{
         console.log('데이터베이스 연결 성공');
     })
