@@ -9,6 +9,7 @@ const dotenv = require('dotenv');   // 환경 변수 관리하는 패키지
 // dotenv는 require하고 나서 제일 위에 적용해 주어야 함
 dotenv.config();
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 
 const app = express();
@@ -47,8 +48,10 @@ app.use(session({
     },
 }));
 
-// localhost:8001/은 pageROuter로 넘겨줌
+// localhost:8001/은 pageRouter로 넘겨줌
 app.use('/',pageRouter);
+// localhost:8001/auth은 authRouter로 넘겨줌
+app.use('/auth',authRouter);
 
 // 404 처리 미들웨어
 app.use((req,res,next)=>{
