@@ -6,7 +6,9 @@
 링크 : https://www.inflearn.com/course/%EB%85%B8%EB%93%9C-%EA%B5%90%EA%B3%BC%EC%84%9C/dashboard<br>
 <br><br>
 
+
 # 9. NodeBird SNS 서비스
 기능 : 로그인, 이미지 업로드, 게시글 작성, 해시태그 검색, 팔로잉<br>
 Mysql 사용, Express 사용<br>
 현재 9-1까지 완성
+Mysql 에러중..
