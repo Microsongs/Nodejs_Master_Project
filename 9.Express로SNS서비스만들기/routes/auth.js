@@ -55,7 +55,7 @@ router.post('/login', isNotLoggedIn, (req, res, next)=>{
                 console.error(loginError);
                 return next(loginError);
             }
-            // 로그인 성공
+            // 로그인 성공 -> 세션 쿠키를 브라우저로 보내준다
             return res.redirect('/');
         });
     })(req, res, next); // 미들웨어 내 미들웨어는 (req, res, next)를 붙여야 함

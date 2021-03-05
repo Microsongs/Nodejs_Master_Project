@@ -1,16 +1,17 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
-const path = require('path');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');   // 환경 변수 관리하는 패키지
-
+const passport = require('passport');
 // dotenv는 require하고 나서 제일 위에 적용해 주어야 함
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
+
+const morgan = require('morgan');
+const path = require('path');
 
 const app = express();
 // 배포 시 port를 다르게 설정하기 위함
@@ -47,6 +48,10 @@ app.use(session({
         secure: false,
     },
 }));
+// router에 가기 전에 미들웨어 2개를 미리 연결
+// express-session의 session을 사용하므로 app.use(session) 아래에 위치해야 함
+app.use(passport.initialize());
+app.use(passport.session());
 
 // localhost:8001/은 pageRouter로 넘겨줌
 app.use('/',pageRouter);
