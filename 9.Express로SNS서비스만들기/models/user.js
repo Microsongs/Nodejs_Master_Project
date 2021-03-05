@@ -5,9 +5,16 @@ module.exports = class User extends Sequelize.Model{
     // User 설정, 꼭 static으로 해야 함
     static init(sequelize){
         return super.init({
+            // id primary key는 생략, 원래는 아래와 같이 되어있음
+            /*
+            id: {
+                type: Sequelize.INTEGER(11),
+                allowNull: false,
+                primaryKey: true,
+            } 
+            */
             // email -> 길이40, null가능, 고유적임 -> 빈 값 2개는 같은 것으로 치지 않음
-            // id primary key는 생략
-            email:{
+            email: {
                 type: Sequelize.STRING(40),
                 allowNull: true,
                 unique: true
