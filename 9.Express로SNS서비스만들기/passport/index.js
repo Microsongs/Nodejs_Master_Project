@@ -5,6 +5,7 @@ const local = require('./localStrategy');
 const kakao = require('./kakaoStrategy');
 const User = require('../models/user');
 
+// 함수 실행은 app.js에서
 module.exports = () => {
     // routes/auth.js에서 req.login이 성공하였을 경우 이 함수가 실행
     passport.serializeUser((user, done) => {

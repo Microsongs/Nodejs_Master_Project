@@ -9,6 +9,7 @@ dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
+const passportConfig = require('./passport');
 
 const morgan = require('morgan');
 const path = require('path');
@@ -33,6 +34,8 @@ sequelize.sync({ force: false })
     .catch((err) => {
         console.error(err);
     });
+// passport 연결
+passportConfig();
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
