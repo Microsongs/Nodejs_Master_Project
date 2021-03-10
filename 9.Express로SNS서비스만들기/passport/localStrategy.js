@@ -9,7 +9,7 @@ module.exports = () => {
     passport.use(new LocalStrategy({
         usernameField: 'email', // req.body.email -> req.body.이름과 일치해야함
         passwordField: 'password',  //req.body.password
-    }, async (email, passowrd, done) => {
+    }, async (email, password, done) => {
         try{
             // email을 가진 사람이 있는지 check
             const exUser = await User.findOne({ where: {email} });
@@ -19,7 +19,7 @@ module.exports = () => {
                 // hash화한 비밀번호와 비교하는 bcrypt.compare
                 const result = await bcrypt.compare(password, exUser.password);
                 if(result){
-                    done(null, exUser);
+                    done(null, exUser, {message: '회원가입 성공하였습니다.'});
                 }
                 else{
                     done(null, false, {message: '비밀번호가 일치하지 않습니다'});
