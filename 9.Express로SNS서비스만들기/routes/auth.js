@@ -9,7 +9,7 @@ const router = express.Router();
 
 // 회원 가입 라우터
 router.post('/join', isNotLoggedIn, async(req, res, next)=>{
-    const {email, nick, passwrod } = req.body;
+    const {email, nick, password } = req.body;
     try{
         // 기존에 email로 가입이 되어있는지 검사하여 있을 경우 join?error=exist로 redirect 처리
         const exUser = await User.findOne({ where: {email} });
