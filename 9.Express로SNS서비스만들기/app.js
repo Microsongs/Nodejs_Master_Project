@@ -8,6 +8,7 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 
@@ -39,6 +40,8 @@ passportConfig();
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+// img를 요청하지만 실제로는 uploads폴더 내의 img를 가져간다
+app.use('/img',express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -60,6 +63,7 @@ app.use(passport.session());
 app.use('/',pageRouter);
 // localhost:8001/auth은 authRouter로 넘겨줌
 app.use('/auth',authRouter);
+app.use('/post',postRouter);
 
 // 404 처리 미들웨어
 app.use((req,res,next)=>{
