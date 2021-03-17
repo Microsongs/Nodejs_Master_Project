@@ -4,6 +4,7 @@ const local = require('./localStrategy');
 // 카카오로 로그인
 const kakao = require('./kakaoStrategy');
 const User = require('../models/user');
+const { Post } = require('../models');
 
 // 함수 실행은 app.js에서
 module.exports = () => {
@@ -18,7 +19,20 @@ module.exports = () => {
     // 세션 쿠키는 browser로 가며, 브라우저는 세션 쿠키를 같이 넣어서 보내줌, 서버가 쿠키를 보고 id를 체크하여 deserializeUser에서 복구
 
     passport.deserializeUser((id, done)=>{
-        User.findOne({ where: { id } })
+        User.findOne(
+            { where: { id },
+            include: [{
+                model: Post,
+            },{
+                model: User,
+                attributes: ['id','nick'],
+                as: 'Followers',
+            },{
+                model: User,
+                attributes: ['id','nick'],
+                as: 'Followings',
+            }],
+        })
             .then(user => done(null, user))
             .catch(err => done(err));
     });
