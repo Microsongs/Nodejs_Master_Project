@@ -1,10 +1,11 @@
 const express = require('express');
-
+const { Post, User } = require('../models');
 const router = express.Router();
 
 // 팔로워, 팔로잉 구현 시 사용
 router.use((req, res, next)=>{
-    res.locals.user = null;
+    // res.locals.user를 위에 설정하여 미들웨어의 특성을 활용하여 중복을 방지할 수 있음
+    res.locals.user = req.user;
     res.locals.followerCount = 0;
     res.locals.floolwingCount = 0;
     res.locals.followerIdList = [];
@@ -24,14 +25,26 @@ router.get('/join',(req,res)=>{
 })
 
 // 메인 화면을 보여줌
-router.get('/',(req,res,next)=>{
+router.get('/',async (req,res,next)=>{
     // twits는 메인 게시물을 넣을 공간
-    const twits = [];
-    res.render('main',{
-        title: 'NodeBird',
-        twits,
-        user: req.user,
-    });
+    try{
+        const posts = await Post.findAll({
+            include:{
+                model: User,
+                atributes: ['id','nick'],
+            },
+            order: [['createdAt','DESC']],
+        });
+        // render에 넣는 변수들은 res.locals에 뺄 수 있다
+        res.render('main',{
+            title:'NodeBird',
+            twits: posts,
+        });
+    }
+    catch(err){
+        console.error(err);
+        next(err);
+    }
 });
 
 module.exports = router;
