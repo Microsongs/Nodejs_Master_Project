@@ -1,5 +1,5 @@
 const express = require('express');
-const { Post, User } = require('../models');
+const { Post, User, Hashtag } = require('../models');
 const router = express.Router();
 
 // 팔로워, 팔로잉 구현 시 사용
@@ -44,6 +44,33 @@ router.get('/',async (req,res,next)=>{
     catch(err){
         console.error(err);
         next(err);
+    }
+});
+
+// 실무에서는 한글을 encodeURIComponent를 해주는 것이 좋음 -> form은 알아서 해준다
+// GET /hashtag?hashtag=노드
+router.get('/hashtag', async(req, res, next) => {
+    const query = req.query.hashtag;
+    if(!query){
+        return res.redirect('/');
+    }
+    try{
+        // hashtag 검색 하고 있다면 getPost로 가져온다
+        const hashtag = await Hashtag.findOne({ where: {title: query} });
+        let posts = [];
+        if(hashtag){
+            // belongsToMany므로 s로 가져옴 attributes로 필요한 것만 가져오는 것이 좋음
+            posts = await hashtag.getPosts({ include: [{ model: User, attributs: ['id','nick'] }] });
+        }
+
+        return res.render('main', {
+            title: `${query} | NodeBird`,
+            twits: posts,
+        });
+    }
+    catch(error){
+        console.error(error);
+        return next(error);
     }
 });
 
