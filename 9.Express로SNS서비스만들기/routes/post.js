@@ -51,16 +51,25 @@ router.post('/', isLoggedIn, upload2.none(), async(req, res, next) => {
             img: req.body.url,
             UserId: req.user.id,
         });
-        const hashtags = req.body.content.match(/#[^\s#]*/g);
+        // hashtag를 위해 정규 표현식 사용
+        const hashtags = req.body.content.match(/#[^\s#]*/g)
+        // 만약에 매치가 없으면 null이 뜨니까 if로 검사
         if(hashtags){
             const result = await Promise.all(
+                // map은 배열을 다음 배열로 바꿔준다 -> where로 앞의 #을 떼어주고 각각 해줌
+                // [#노드, #익스프레스] -> [노드, 익스프레스] -> [findOrCreate(노드), findOrCreate(익스프레스)]
+                // [[해시태그, false]는 중복 [해시태그, true]는 새로 생성]
+                // findOrCreate는 중복을 막아줌
                 hashtags.map(tag => {
                     return Hashtag.findOrCreate({
                         where: { title: tag.slice(1).toLowerCase() },
                     })
                 }),
             );
+            console.log(result);
             await post.addHashtags(result.map(r => r[0]));
+            // addFollowings([아이디])만 가능
+            // addHashtags([해시태그 혹은 create의 결과물 혹은 id]) ->
         }
         res.redirect('/');
     }
