@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
             where: {id : req.user && req.user.id || null},
             include: { model: Domain}
         });
+        // localhost:8002로 접속하면 해당 부분이 실행되어 login.html로 가서 로그인하게끔
         res.render('login', {
             user,
             domains: user && user.Domains,
