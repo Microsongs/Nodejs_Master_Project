@@ -17,7 +17,8 @@ module.exports = class Domain extends Sequelize.Model {
             },
             // restAPI 키
             clientSecret: {
-                type: Sequelize.STRING(30),
+                // mysql은 V4 불가능
+                type: Sequelize.UUID,
                 allowNull: false,
             },
         },{
