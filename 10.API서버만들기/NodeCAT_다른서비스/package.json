@@ -1,0 +1,15 @@
+{
+  "name": "nodecat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Microsong",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5"
+  }
+}

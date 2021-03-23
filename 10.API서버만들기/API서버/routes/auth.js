@@ -38,7 +38,8 @@ router.post('/login', isNotLoggedIn, (req, res, next)=>{
     // 미들 웨어를 확장하는 패턴 -> front에서 로그인 요청을 보내면 이 부분이 실행됨
     // passport.authenticate('local')까지 실행되며, 이 부분에서 localStrategy로 가서 localStrategy의 app.use 호출
     // 그 결과는 done함수로 return되는데, 아래의 콜백 함수와 일치함
-    passport.authenticate('local', (authError, user, info) => {
+    // 2번째 인수를 session:false로 하여 JWT토큰 쿠키를 발급
+    passport.authenticate('local',{ session: false}, (authError, user, info) => {
         // 서버 측 에러일 경우
         if(authError){
             console.error(authError);
