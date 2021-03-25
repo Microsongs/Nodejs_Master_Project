@@ -5,6 +5,11 @@ const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
+// CORS 방지용
+const cors = require('cors');
+router.use(cors({
+    credentials: true,
+}));
 
 // 토큰 발급 라우트
 router.post('/token', apiLimiter, async(req, res) => {
@@ -30,6 +35,11 @@ router.post('/token', apiLimiter, async(req, res) => {
             expiresIn: '1m', //1분
             issuer: 'nodebird',
         });
+        // CORS해결, 모든 브라우저에서 접근 가능, 활용성 떨어짐
+        /*
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('Access-Control-Allow-Credentials','*');
+        */
         return res.json({
             code: 200,
             message: '토큰이 발급되었습니다.',
