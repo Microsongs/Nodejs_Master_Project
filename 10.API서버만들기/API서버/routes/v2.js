@@ -1,16 +1,13 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const { verifyToken, deprecated } = require('./middlewares');
+const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
 
-// 버전 up 안내, 모든 라우터에 적용되면 위와 같이 사용
-router.use(deprecated);
-
 // 토큰 발급 라우트
-router.post('/token', async(req, res) => {
+router.post('/token', apiLimiter, async(req, res) => {
     const { clientSecret } = req.body;
     try{
         const domain = await Domain.findOne({
@@ -53,7 +50,7 @@ router.get('/test',verifyToken, (req, res) => {
 });
 
 // nodebird의 data를 보내주는 router
-router.get('/posts/my', verifyToken, (req, res) => {
+router.get('/posts/my', verifyToken,apiLimiter, (req, res) => {
     // 자신의 data를 가져온다
     Post.findAll({ where: { userId: req.decoded.id}})
         .then((posts) => {

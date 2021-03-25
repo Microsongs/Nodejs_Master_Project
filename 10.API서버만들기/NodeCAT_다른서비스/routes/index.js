@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const router = express.Router();
 
-const URL = 'http://localhost:8002/v1';
+const URL = 'http://localhost:8002/v2';
 // origin에 넣어 두어 요청이 어디에서 왔는지 headers.origin에서 check
 axios.defaults.headers.origin = 'http://localhost:4000';
 

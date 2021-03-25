@@ -1,5 +1,6 @@
 // 여러 라우터들에서 재사용할 미들웨어들
 const jwt = require('jsonwebtoken');
+const RateLimit = require('express-rate-limit');
 
 // 로그인 했는지 판단
 exports.isLoggedIn = (req, res, next) => {
@@ -23,6 +24,7 @@ exports.isNotLoggedIn = (req, res, next)=>{
     }
 };
 
+
 exports.verifyToken = (req, res, next) => {
     try{
         req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
@@ -41,4 +43,28 @@ exports.verifyToken = (req, res, next) => {
             message: '유효하지 않은 토큰입니다.',
         });
     }
+};
+
+// 몇분 간 몇번 사용하였는지 체크
+exports.apiLimiter = new RateLimit({
+    // 1분에 1번 요청 가능
+    windowsMs: 60 * 1000,
+    max: 10,
+    // 호출간격 : 0 -> 적어도 요청간 간격이 있어야 한다
+    delayMs: 0,
+    handler(req, res){
+        // 429 -> 할달얄 초과
+        res.status(this.statusCode).json({
+            code: this.statusCode,
+            message: '1분에 한 번만 요청할 수 있습니다.',
+        });
+    },
+});
+
+// 해당 버전 사용하지 말라고 경고
+exports.deprecated = (req, res) => {
+    res.status(10).json({
+        code: 410,
+        message: '새로운 버전이 나왔습니다. 새로운 버전을 사용하세요.',
+    });
 }
