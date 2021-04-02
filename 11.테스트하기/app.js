@@ -85,7 +85,13 @@ app.use((err, req, res, next)=>{
     res.render('error');
 });
 
+/*
+// server.js로 태스트중엔 사용하지 않음
 // port에 연결
 app.listen(app.get('port'),() => {
     console.log(app.get('port'),'번 포트에서 대기중');
 });
+*/
+
+// 실제 서버를 돌리지 않기 위하여
+module.exports = app;
